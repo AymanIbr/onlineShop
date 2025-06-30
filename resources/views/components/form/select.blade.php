@@ -9,7 +9,7 @@
         <option style="font-weight: bold" value="" selected>{{ $placeholder }}</option>
     @endif
     @foreach ($options as $option)
-        <option value="{{ $option->id }}" @if (old($name, $oldval) == $option->id) selected @endif>{{ $option->trans_name }}
+        <option value="{{ $option->id }}" @if (old($name, $oldval) == $option->id) selected @endif>{{ $option->name }}
         </option>
     @endforeach
 </select>
