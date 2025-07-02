@@ -74,6 +74,7 @@
                         $('.prev-img').attr('src', "{{ asset('backend/img/prev.jpg') }}");
                         $('#name').removeClass('is-invalid');
                         $('#name_error').text('');
+                        $('#image_error').text('');
                     },
                     error: function(xhr) {
                         if (xhr.status === 422) {

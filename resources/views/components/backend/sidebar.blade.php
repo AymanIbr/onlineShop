@@ -63,7 +63,46 @@
             </div>
         </li>
 
+        <hr class="sidebar-divider">
 
+
+        <li
+            class="nav-item {{ request()->routeIs('admin.brands.index') || request()->routeIs('admin.brands.create') ? 'active' : '' }} ">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoBrands"
+                aria-expanded="true" aria-controls="collapseTwoBrands">
+                <i class="fas fa-code-branch"></i>
+                <span>Brands</span>
+            </a>
+            <div id="collapseTwoBrands"
+                class="collapse {{ request()->routeIs('admin.brands.index') || request()->routeIs('admin.brands.create') ? 'show' : '' }} "
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ request()->routeIs('admin.brands.index') ? 'active' : '' }}"
+                        href="{{ route('admin.brands.index') }}">All Brand</a>
+                    <a class="collapse-item {{ request()->routeIs('admin.brands.create') ? 'active' : '' }} "
+                        href="{{ route('admin.brands.create') }}">Add New</a>
+                </div>
+            </div>
+        </li>
+        <hr class="sidebar-divider">
+        <li
+            class="nav-item {{ request()->routeIs('admin.products.index') || request()->routeIs('admin.products.create') ? 'active' : '' }} ">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoProducts"
+                aria-expanded="true" aria-controls="collapseTwoProducts">
+                <i class="fas fa-fw fa-heart"></i>
+                <span>Products</span>
+            </a>
+            <div id="collapseTwoProducts"
+                class="collapse {{ request()->routeIs('admin.products.index') || request()->routeIs('admin.products.create') ? 'show' : '' }} "
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ request()->routeIs('admin.products.index') ? 'active' : '' }}"
+                        href="{{ route('admin.products.index') }}">All Product</a>
+                    <a class="collapse-item {{ request()->routeIs('admin.products.create') ? 'active' : '' }} "
+                        href="{{ route('admin.products.create') }}">Add New</a>
+                </div>
+            </div>
+        </li>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

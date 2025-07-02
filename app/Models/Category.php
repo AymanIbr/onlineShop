@@ -21,6 +21,11 @@ class Category extends Model
         return $this->hasMany(SubCategory::class, 'category_id', 'id');
     }
 
+    function products()
+    {
+        return $this->hasMany(Product::class, 'category_id', 'id');
+    }
+
     public function getImagePathAttribute()
     {
         $url = asset('backend/img/100x80.svg');

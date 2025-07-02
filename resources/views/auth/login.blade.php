@@ -274,7 +274,7 @@
                     password: password
                 })
                 .then(function(response) {
-                    toastr.success('Login successful!');
+                    toastr.success('Login Successful!');
                     window.location.href = "/admin/dashboard";
                 })
                 .catch(function(error) {

@@ -19,6 +19,10 @@ class SubCategory extends Model
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
+    function products()
+    {
+        return $this->hasMany(Product::class, 'sub_category_id', 'id');
+    }
     public function image()
     {
         return $this->morphOne(Image::class, 'imageable');
