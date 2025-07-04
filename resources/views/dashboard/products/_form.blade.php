@@ -113,7 +113,12 @@
                 <!-- Content -->
                 <div class="mb-3">
                     <x-form.area label="Description" id="description" name="description"
-                        placeholder="Enter Product description" :oldval="$product->description" :tiny=false />
+                        placeholder="Enter Product description" :oldval="$product->description" :tiny=true />
+                </div>
+
+                 <div class="mb-3">
+                    <x-form.area label="Shipping and Returns" id="shipping_returns" name="shipping_returns"
+                        placeholder="Enter Shipping and Returns" :oldval="$product->shipping_returns" :tiny=true />
                 </div>
             </div>
         </div>
@@ -126,7 +131,7 @@
             <label class="d-block" for="image">
                 <img class="img-thumbnail prev-img"
                     style="width: 100%; height: 300px; cursor: pointer; object-fit: cover"
-                    src="{{ $product->id ? asset('storage/' . $product->image->path) : asset('backend/img/prev.jpg') }}"
+                    src="{{ $product->id ? asset('storage/' . $product->image->path) : asset('admin-assets/img/prev.jpg') }}"
                     alt="Product Image">
             </label>
             <div id="image_error" class="invalid-feedback d-block"></div>

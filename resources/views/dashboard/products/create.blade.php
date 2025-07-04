@@ -30,7 +30,7 @@
         <script>
             $('#create-form').submit(function(event) {
                 event.preventDefault();
-
+                tinymce.triggerSave();
                 let formData = new FormData(this);
                 $.ajax({
                     type: 'POST',
@@ -42,7 +42,7 @@
                         toastr.success(response.message || 'Product created successfully');
 
                         $('#create-form')[0].reset();
-                        $('.prev-img').attr('src', "{{ asset('backend/img/prev.jpg') }}");
+                        $('.prev-img').attr('src', "{{ asset('admin-assets/img/prev.jpg') }}");
                         $('.gallery-wrapper').empty();
 
                         $('.is-invalid').removeClass('is-invalid');

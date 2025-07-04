@@ -252,7 +252,7 @@
                 <label for="password">Password</label>
                 <input id="password" type="password" name="password" placeholder="Password">
 
-                <button class="login">Log In</button>
+                <button type="submit" class="login">Log In</button>
                 <a href="{{ route('password.request') }}">Forgot Password?</a>
             </form>
         </div>
@@ -268,6 +268,10 @@
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const button = document.querySelector('.login');
+
+            button.disabled = true;
+            button.textContent = 'Logging in...';
 
             axios.post('{{ route('login') }}', {
                     email: email,
@@ -278,11 +282,14 @@
                     window.location.href = "/admin/dashboard";
                 })
                 .catch(function(error) {
-                    if (error.response && error.response.status === 422) {
+                    if (error.response) {
                         toastr.error(error.response.data.message || "Invalid credentials.");
                     } else {
                         toastr.error("Something went wrong. Please try again.");
                     }
+                }).finally(() => {
+                    button.disabled = false;
+                    button.textContent = 'Log In';
                 });
         });
     </script>

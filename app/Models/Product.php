@@ -11,7 +11,7 @@ class Product extends Model
     protected $guarded = [];
     protected $appends = ['image_path'];
 
-     protected $casts = [
+    protected $casts = [
         'active' => 'boolean',
         'track_qty' => 'boolean',
     ];
@@ -48,7 +48,7 @@ class Product extends Model
 
     public function getImagePathAttribute()
     {
-        $url = asset('assets/img/100x80.svg');
+        $url = asset('admin-assets/img/100x80.svg');
         if ($this->image) {
             $url = asset('storage/' . $this->image->path);
         }

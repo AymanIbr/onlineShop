@@ -35,6 +35,7 @@
                 let formData = new FormData();
                 formData.append('name', $('#name').val());
                 formData.append('active', $('#active').is(':checked') ? 1 : 0);
+                formData.append('show_home', $('#show_home').is(':checked') ? 1 : 0);
                 formData.append('image', $('#image')[0].files[0]);
                 formData.append('category_id', $('#category_id').val());
 
@@ -47,7 +48,7 @@
                     success: function(response) {
                         toastr.success(response.message || 'Sub Category created successfully');
                         $('#create-form')[0].reset();
-                        $('.prev-img').attr('src', "{{ asset('backend/img/prev.jpg') }}");
+                        $('.prev-img').attr('src', "{{ asset('admin-assets/img/prev.jpg') }}");
                         $('#name').removeClass('is-invalid');
                         $('#name_error').text('');
 

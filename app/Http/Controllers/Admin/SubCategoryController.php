@@ -46,6 +46,7 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:30',
             'active' => 'required|boolean',
+            'show_home' => 'required|boolean',
             'category_id' => 'required|integer|exists:categories,id',
             'image' => 'required|image|max:2048|mimes:png,jpg',
         ]);
@@ -60,6 +61,7 @@ class SubCategoryController extends Controller
             'name' => $request->name,
             'category_id' => $request->category_id,
             'active' => $request->active,
+            'show_home' => $request->show_home,
         ]);
 
         $path =  $request->file('image')->store('uploads', 'custom');
@@ -97,6 +99,7 @@ class SubCategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:30',
             'active' => 'required|boolean',
+            'show_home' => 'required|boolean',
             'category_id' => 'required|integer|exists:categories,id',
             'image' => 'nullable|image|max:2048|mimes:png,jpg',
         ]);
@@ -111,6 +114,7 @@ class SubCategoryController extends Controller
             'name' => $request->name,
             'category_id' => $request->category_id,
             'active' => $request->active,
+            'show_home' => $request->show_home,
         ]);
 
         if ($request->hasFile('image')) {

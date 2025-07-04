@@ -12,6 +12,15 @@
             <div id="status_error" class="invalid-feedback d-block"></div>
         </div>
 
+        <div class="form-group mt-4">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="show_home" id="show_home"
+                    @if ($category->show_home) checked @endif>
+                <label class="custom-control-label" for="show_home">Show on Home</label>
+            </div>
+            <div id="show_home_error" class="invalid-feedback d-block"></div>
+        </div>
+
     </div>
 
     <div class="col-md-6">
@@ -27,9 +36,7 @@
             <label class="d-block" for="image">
                 <img class="img-thumbnail prev-img"
                     style="width: 80%; height: 300px; cursor: pointer; object-fit: cover" {{-- $post->image ? $post->image --}}
-                    {{-- src="{{ $category->id ? asset('storage/' . $category->image->path) : asset('backend/img/prev.jpg') }}" --}}
-                    src="{{ $category->image_path }}"
-                    alt="category Image">
+                    {{-- src="{{ $category->id ? asset('storage/' . $category->image->path) : asset('backend/img/prev.jpg') }}" --}} src="{{ $category->image_path }}" alt="category Image">
             </label>
             @error('image')
                 <div class="invalid-feedback d-block">{{ $message }}</div>

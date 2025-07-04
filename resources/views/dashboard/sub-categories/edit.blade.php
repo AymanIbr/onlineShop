@@ -34,6 +34,7 @@
                 formData.append('_method', 'put');
                 formData.append('name', $('#name').val());
                 formData.append('active', $('#active').is(':checked') ? 1 : 0);
+                formData.append('show_home', $('#show_home').is(':checked') ? 1 : 0);
                 formData.append('category_id', $('#category_id').val());
                 if ($('#image')[0].files[0]) {
                     formData.append('image', $('#image')[0].files[0]);

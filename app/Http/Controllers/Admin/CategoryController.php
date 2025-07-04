@@ -44,6 +44,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:30',
             'active' => 'required|boolean',
+            'show_home' => 'required|boolean',
             'image' => 'required|image|max:2048|mimes:png,jpg',
         ]);
 
@@ -61,7 +62,8 @@ class CategoryController extends Controller
 
         $category = Category::create([
             'name' => $request->name,
-            'active' => $request->active
+            'active' => $request->active,
+            'show_home' => $request->show_home,
         ]);
 
         $path =  $request->file('image')->store('uploads', 'custom');
@@ -111,6 +113,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|min:3|max:30',
             'active' => 'required|boolean',
+            'show_home' => 'required|boolean',
             'image' => 'nullable|image|max:2048|mimes:png,jpg',
         ]);
 
@@ -128,7 +131,8 @@ class CategoryController extends Controller
 
         $category->update([
             'name' => $request->name,
-            'active' => $request->active
+            'active' => $request->active,
+            'show_home' => $request->show_home,
         ]);
 
         if ($request->hasFile('image')) {

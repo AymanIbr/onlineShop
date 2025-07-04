@@ -23,13 +23,11 @@
         </div>
     </div>
 
-
-
     @push('js')
         <script>
             $('#update-form').submit(function(event) {
                 event.preventDefault();
-
+                tinymce.triggerSave();
                 let formData = new FormData(this);
                 formData.append('_method', 'put');
 
@@ -47,8 +45,6 @@
                         }
                     }
                 }
-
-
                 $.ajax({
                     type: 'POST',
                     url: '{{ route('admin.products.update', $product->id) }}',

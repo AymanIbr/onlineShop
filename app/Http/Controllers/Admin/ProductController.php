@@ -64,8 +64,9 @@ class ProductController extends Controller
             'track_qty' => $request->has('track_qty'),
         ]);
         $validator = Validator::make($request->all(), [
-            'title'            => 'required|string|min:3|max:100',
+            'title' => 'required|string|min:3|max:100|unique:products,title',
             'description'      => 'nullable|string|max:1000',
+            'shipping_returns'      => 'nullable|string|max:1000',
             'price'            => 'required|numeric|min:0',
             'compare_price'    => 'nullable|numeric|min:0|gte:price',
             'quantity'         => 'required|integer|min:0',
@@ -90,6 +91,7 @@ class ProductController extends Controller
         $product = Product::create([
             'title'            => $request->title,
             'description'      => $request->description,
+            'shipping_returns'      => $request->shipping_returns,
             'price'            => $request->price,
             'compare_price'    => $request->compare_price,
             'quantity'         => $request->quantity,
@@ -161,6 +163,7 @@ class ProductController extends Controller
         $validator = Validator::make($request->all(), [
             'title'            => 'required|string|min:3|max:100',
             'description'      => 'nullable|string|max:1000',
+            'shipping_returns'      => 'nullable|string|max:1000',
             'price'            => 'required|numeric|min:0',
             'compare_price'    => 'nullable|numeric|min:0|gte:price',
             'quantity'         => 'required|integer|min:0',
@@ -185,6 +188,7 @@ class ProductController extends Controller
         $product->update([
             'title'            => $request->title,
             'description'      => $request->description,
+            'shipping_returns'      => $request->shipping_returns,
             'price'            => $request->price,
             'compare_price'    => $request->compare_price,
             'quantity'         => $request->quantity,

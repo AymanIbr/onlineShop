@@ -29,7 +29,7 @@ class SubCategory extends Model
     }
     public function getImagePathAttribute()
     {
-        $url = asset('backend/img/100x80.svg');
+        $url = asset('admin-assets/img/100x80.svg');
         if ($this->image) {
             $url = asset('storage/' . $this->image->path);
         }

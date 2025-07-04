@@ -20,6 +20,15 @@
             <div id="status_error" class="invalid-feedback d-block"></div>
         </div>
 
+        <div class="form-group mt-4">
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" name="show_home" id="show_home"
+                    @if ($subCategory->show_home) checked @endif>
+                <label class="custom-control-label" for="show_home">Show on Home</label>
+            </div>
+            <div id="show_home_error" class="invalid-feedback d-block"></div>
+        </div>
+
 
 
     </div>
