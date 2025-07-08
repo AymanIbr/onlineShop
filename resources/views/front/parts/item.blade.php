@@ -5,13 +5,13 @@
          <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
 
          <div class="product-action">
-             <a class="btn btn-dark" href="#">
+             <button type="button" class="btn btn-dark add-to-cart" data-id="{{ $product->id }}">
                  <i class="fa fa-shopping-cart"></i> Add To Cart
-             </a>
+             </button>
          </div>
      </div>
      <div class="card-body text-center mt-3">
-         <a class="h6 link" href="{{ route('site.product',$product->slug) }}">{{ $product->title }}</a>
+         <a class="h6 link" href="{{ route('site.product', $product->slug) }}">{{ $product->title }}</a>
          <div class="price mt-2">
              <span class="h5"><strong>${{ $product->price }}</strong></span>
              @if ($product->compare_price)
@@ -20,4 +20,3 @@
          </div>
      </div>
  </div>
-

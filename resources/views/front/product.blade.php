@@ -61,8 +61,9 @@
 
                             {{-- {{ Str::words($product->description, 2, '...') }} --}}
                             <p>{!! \Illuminate\Support\Str::words(strip_tags($product->description), 10, '...') !!}</p>
-                            <a href="cart.php" class="btn btn-dark"><i class="fas fa-shopping-cart"></i> &nbsp;ADD TO
-                                CART</a>
+                            <button type="button" class="btn btn-dark add-to-cart" data-id="{{ $product->id }}">
+                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                            </button>
                         </div>
                     </div>
 
@@ -89,7 +90,7 @@
                                 <div class="tab-pane fade show active" id="description" role="tabpanel"
                                     aria-labelledby="description-tab">
                                     <p>
-                                      {!! $product->description !!}
+                                        {!! $product->description !!}
                                     </p>
                                 </div>
                                 <div class="tab-pane fade" id="shipping" role="tabpanel"

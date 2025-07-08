@@ -24,6 +24,7 @@
     <meta property="og:image:width" content="" />
     <meta property="og:image:height" content="" />
     <meta property="og:image:alt" content="" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     <meta name="twitter:title" content="" />
     <meta name="twitter:site" content="" />
@@ -31,7 +32,6 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:image:alt" content="" />
     <meta name="twitter:card" content="summary_large_image" />
-
 
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/slick.css') }}" />
 
@@ -50,32 +50,77 @@
 
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
     @stack('css')
 </head>
 
 <body data-instant-intensity="mousedown">
-
     <div class="bg-light top-header">
         <div class="container">
             <div class="row align-items-center py-3 d-none d-lg-flex justify-content-between">
+
                 <div class="col-lg-4 logo">
                     <a href="{{ route('site.index') }}" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Online</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">SHOP</span>
                     </a>
                 </div>
-                <div class="col-lg-6 col-6 text-left  d-flex justify-content-end align-items-center">
-                    <a href="account.php" class="nav-link text-dark">My Account</a>
-                    <form action="">
+
+                <div class="col-lg-6 col-6 text-left d-flex justify-content-end align-items-center gap-3">
+
+                    @guest('web')
+                        @if (!request()->routeIs('login'))
+                            <a href="{{ route('login') }}" class="btn btn-dark border-width-2 d-none d-lg-inline-block">
+                                <span class="mr-2 icon-lock_outline"></span>Log In
+                            </a>
+                        @endif
+
+                        @if (!request()->routeIs('register'))
+                            <a href="{{ route('register') }}" class="btn btn-dark border-width-2 d-none d-lg-inline-block">
+                                <span class="mr-2 icon-lock_outline"></span>Register
+                            </a>
+                        @endif
+                    @endguest
+
+                    {{-- @auth('web')
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" role="button" id="userMenu"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::guard('web')->user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout').submit();">
+                                        <i class="fa fa-lock me-2"></i>Sign Out
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    @endauth --}}
+
+                    <!-- Search Form -->
+                    <form action="" class="d-flex ms-3">
                         <div class="input-group">
                             <input type="text" placeholder="Search For Products" class="form-control"
-                                aria-label="Amount (to the nearest dollar)">
-                            <span class="input-group-text">
+                                aria-label="Search">
+                            <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
-                            </span>
+                            </button>
                         </div>
                     </form>
+
+                    <!-- Hidden Logout Form -->
+                    <form action="{{ route('logout') }}" method="POST" id="logout" style="display: none;">
+                        @csrf
+                    </form>
+
                 </div>
+
             </div>
         </div>
     </div>
@@ -112,7 +157,8 @@
 
                                             @foreach ($category->sub_categories as $SubCategory)
                                                 <li><a class="dropdown-item nav-link"
-                                                        href="{{ route('site.shop',[$category->slug, $SubCategory->slug]) }}">{{ $SubCategory->name }}</a></li>
+                                                        href="{{ route('site.shop', [$category->slug, $SubCategory->slug]) }}">{{ $SubCategory->name }}</a>
+                                                </li>
                                             @endforeach
                                         </ul>
                                     @endif
@@ -123,7 +169,7 @@
                     </ul>
                 </div>
                 <div class="right-nav py-0">
-                    <a href="cart.php" class="ml-3 d-flex pt-2">
+                    <a href="{{ route('site.carts.index') }}" class="ml-3 d-flex pt-2">
                         <i class="fas fa-shopping-cart text-primary"></i>
                     </a>
                 </div>
@@ -185,14 +231,20 @@
             </div>
         </div>
     </footer>
+
+
     <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/bootstrap.bundle.5.1.3.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/instantpages.5.1.0.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/lazyload.17.6.0.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/slick.min.js') }}"></script>
     <script src="{{ asset('front-assets/js/custom.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
 
     <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
+
     <script>
         window.onscroll = function() {
             myFunction()
@@ -208,7 +260,40 @@
                 navbar.classList.remove("sticky");
             }
         }
+
+        // cart
+
+        $('.add-to-cart').click(function() {
+            let id = $(this).data('id');
+            $.ajax({
+                url: '/carts',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: id,
+                    quantity: 1,
+                },
+                success: (response) => {
+                    Swal.fire({
+                        title: "Item Added!",
+                        text: response.message,
+                        icon: "success",
+                        draggable: true
+                    });
+                }
+            })
+
+        })
     </script>
+
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
+
     @stack('js')
 </body>
 

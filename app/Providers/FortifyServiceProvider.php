@@ -38,7 +38,7 @@ class FortifyServiceProvider extends ServiceProvider
                 if ($request->user('admin')) {
                     return redirect()->route('admin.index');
                 }
-                return redirect()->route('indexPage');
+                return redirect()->route('site.index');
             }
         });
     }
@@ -66,7 +66,7 @@ class FortifyServiceProvider extends ServiceProvider
         if (Config::get('fortify.guard') == 'admin') {
             Fortify::viewPrefix('auth.');
         } else {
-            Fortify::viewPrefix('Front.auth.');
+            Fortify::viewPrefix('front.auth.');
         }
     }
 }

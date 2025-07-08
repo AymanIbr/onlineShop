@@ -1,5 +1,15 @@
 <x-front.layout title="Home">
 
+    @if (session()->has('swal'))
+        @push('js')
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const options = @json(session('swal'));
+                    Swal.fire(options);
+                });
+            </script>
+        @endpush
+    @endif
     <main>
         <section class="section-1">
             <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel"
@@ -22,7 +32,8 @@
                                 <p class="mx-md-5 px-5">Lorem rebum magna amet lorem magna erat diam stet. Sadips duo
                                     stet
                                     amet amet ndiam elitr ipsum diam</p>
-                                <a class="btn btn-outline-light py-2 px-4 mt-3" href="#">Shop Now</a>
+                                <a class="btn btn-outline-light py-2 px-4 mt-3" href="{{ route('site.shop') }}">Shop
+                                    Now</a>
                             </div>
                         </div>
                     </div>
