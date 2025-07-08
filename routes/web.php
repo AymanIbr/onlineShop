@@ -27,3 +27,4 @@ Route::middleware('auth:web')->group(function () {
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('checkout', [CheckoutController::class, 'store']);
 });
+Route::post('/shipping-charge', [CheckoutController::class, 'getCharge'])->name('shipping.charge');

@@ -141,20 +141,18 @@
                                                 ${{ number_format($item->product->price * $item->quantity) }}</div>
                                         </div>
                                     @endforeach
-                                    <div class="d-flex justify-content-between summery-end">
-                                        <div class="h6"><strong>Subtotal</strong></div>
-                                        <div class="h6"><strong>${{ number_format($cart->total()) }}</strong>
-                                        </div>
-                                    </div>
                                     <div class="d-flex justify-content-between mt-2">
                                         <div class="h6"><strong>Shipping</strong></div>
-                                        <div class="h6"><strong>$20</strong></div>
+                                        <div class="h6" id="shipping-amount">
+                                            ${{ number_format($totalShippingCharge) }}</div>
                                     </div>
                                     <div class="d-flex justify-content-between mt-2 summery-end">
                                         <div class="h5"><strong>Total</strong></div>
-                                        <div class="h5"><strong>${{ number_format($cart->total() + 20) }}</strong>
-                                        </div>
+                                        <div class="h5" id="total-amount">
+                                            ${{ number_format($cart->total() + $totalShippingCharge) }}</div>
                                     </div>
+                                    <input type="hidden" id="subtotal-amount" data-value="{{ $cart->total() }}">
+                                    <input type="hidden" id="discount-amount" data-value="0">
                                 </div>
                             </div>
 
@@ -269,6 +267,42 @@
                     }
                 });
             });
+
+            // shipping
+
+            $('#country').change(function() {
+                let countryCode = $(this).val();
+                if (!countryCode) {
+                    $('#shipping-amount').text('$0');
+                    updateTotal();
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('shipping.charge') }}',
+                    method: 'POST',
+                    data: {
+                        country: countryCode,
+                        _token: '{{ csrf_token() }}',
+                    },
+                    success: function(response) {
+                        let shippingAmount = response.amount || 0;
+                        $('#shipping-amount').text(`$${shippingAmount.toFixed(0)}`);
+                        updateTotal(shippingAmount);
+                    },
+                    error: function() {
+                        $('#shipping-amount').text('$0');
+                        updateTotal(0);
+                    }
+                });
+            });
+
+            function updateTotal(shippingAmount = 0) {
+                let subtotal = parseFloat($('#subtotal-amount').data('value')) || 0;
+                let discount = parseFloat($('#discount-amount').data('value')) || 0;
+                let total = subtotal + shippingAmount - discount;
+                $('#total-amount').text(`$${total.toFixed(0)}`);
+            }
         </script>
     @endpush
 

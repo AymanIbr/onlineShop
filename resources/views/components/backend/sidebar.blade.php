@@ -104,6 +104,45 @@
             </div>
         </li>
 
+
+        <li
+            class="nav-item {{ request()->routeIs('admin.shipping.index') || request()->routeIs('admin.shipping.create') ? 'active' : '' }} ">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoShipping"
+                aria-expanded="true" aria-controls="collapseTwoShipping">
+                <i class="fas fa-shipping-fast"></i> <span>Shipping</span>
+            </a>
+            <div id="collapseTwoShipping"
+                class="collapse {{ request()->routeIs('admin.shipping.index') || request()->routeIs('admin.shipping.create') ? 'show' : '' }} "
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ request()->routeIs('admin.shipping.index') ? 'active' : '' }}"
+                        href="{{ route('admin.shipping.index') }}">All Shipping</a>
+                    <a class="collapse-item {{ request()->routeIs('admin.shipping.create') ? 'active' : '' }} "
+                        href="{{ route('admin.shipping.create') }}">Add New</a>
+                </div>
+            </div>
+        </li>
+
+          <li
+            class="nav-item {{ request()->routeIs('admin.coupons.index') || request()->routeIs('admin.coupons.create') ? 'active' : '' }} ">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoCoupons"
+                aria-expanded="true" aria-controls="collapseTwoCoupons">
+                <i class="fas fa-percent"></i></i> <span>Coupons</span>
+            </a>
+            <div id="collapseTwoCoupons"
+                class="collapse {{ request()->routeIs('admin.coupons.index') || request()->routeIs('admin.coupons.create') ? 'show' : '' }} "
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item {{ request()->routeIs('admin.coupons.index') ? 'active' : '' }}"
+                        href="{{ route('admin.coupons.index') }}">All Coupons</a>
+                    <a class="collapse-item {{ request()->routeIs('admin.coupons.create') ? 'active' : '' }} "
+                        href="{{ route('admin.coupons.create') }}">Add New</a>
+                </div>
+            </div>
+        </li>
+
+
+
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
             <button class="rounded-circle border-0" id="sidebarToggle"></button>

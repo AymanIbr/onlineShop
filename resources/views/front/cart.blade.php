@@ -107,23 +107,24 @@
                     </div>
                     <div class="col-md-4">
                         <div class="card cart-summery">
-                            <div class="sub-title">
-                                <h2 class="bg-white">Cart Summery</h3>
-                            </div>
+
                             <div class="card-body">
+                                <div class="sub-title">
+                                    <h2 class="bg-white">Cart Summery</h3>
+                                </div>
                                 <div class="d-flex justify-content-between pb-2">
                                     <div>Subtotal</div>
                                     <div>$<span id="subtotal">{{ $cart->total() }}</span></div>
                                 </div>
-                                <div class="d-flex justify-content-between pb-2">
+                                {{-- <div class="d-flex justify-content-between pb-2">
                                     <div>Shipping</div>
                                     <div>$20</div>
-                                </div>
-                                <div class="d-flex justify-content-between summery-end">
+                                </div> --}}
+                                {{-- <div class="d-flex justify-content-between summery-end">
                                     <div>Total</div>
                                     <div>$<span id="grandtotal">{{ $cart->total() + 20 }}</span></div>
-                                </div>
-                                <div class="pt-5">
+                                </div> --}}
+                                <div class="pt-2">
                                     @if ($cart->get()->count() == 0)
                                         <a href="javascript:void(0)"
                                             class="btn-dark btn btn-block w-100 btn-proceed-checkout empty-cart">Cart
@@ -150,14 +151,19 @@
 
     @push('js')
         <script>
-            document.querySelector('.empty-cart').addEventListener('click', function(e) {
-                e.preventDefault();
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning',
-                    text: 'Your cart is empty!',
-                    confirmButtonText: 'OK'
-                });
+            document.addEventListener('DOMContentLoaded', function() {
+                const emptyCartBtn = document.querySelector('.empty-cart');
+                if (emptyCartBtn) {
+                    emptyCartBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Warning',
+                            text: 'Your cart is empty!',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                }
             });
 
             $(document).ready(function() {

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Models\ShippingCharge;
 use App\Repositories\Cart\CartRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,7 @@ use Throwable;
 
 class CheckoutController extends Controller
 {
-    public function create(CartRepository $cart)
+    public function create(Request $request, CartRepository $cart)
     {
         if ($cart->get()->count() == 0) {
             session()->flash('swal', [
@@ -32,6 +33,7 @@ class CheckoutController extends Controller
         return view('front.checkout', [
             'cart' => $cart,
             'countries' => Countries::getNames(),
+            'totalShippingCharge' => 0,
         ]);
     }
 
@@ -69,13 +71,16 @@ class CheckoutController extends Controller
                     ], 400);
                 }
             }
-
             $paymentMethod = $request->payment_method;
+
+            // calculate shipping
+            $shippingCharge = ShippingCharge::where('country', $request->country)->value('amount') ?? 0;
+            
             $order = Order::create([
                 'user_id' => Auth::id(),
-                'shipping' => 20,
+                'shipping' => $shippingCharge,
                 'discount' => $request->input('discount', 0),
-                'total' => $cart->total() + 20 - $request->input('discount', 0),
+                'total' => $cart->total() + $shippingCharge - $request->input('discount', 0),
                 'coupon_code' => $request->input('coupon_code'),
                 'payment_method' => $paymentMethod,
                 'status' => 'pending',
@@ -117,6 +122,7 @@ class CheckoutController extends Controller
                     ]);
             }
 
+
             $cart->empty();
             DB::commit();
 
@@ -139,5 +145,15 @@ class CheckoutController extends Controller
     {
         $order = Order::findOrFail($orderId);
         return view('front.thanks', compact('order'));
+    }
+
+    public function getCharge(Request $request)
+    {
+        $country = $request->input('country');
+        $amount = ShippingCharge::where('country', $country)->value('amount') ?? 0;
+
+        return response()->json([
+            'amount' => $amount,
+        ]);
     }
 }
