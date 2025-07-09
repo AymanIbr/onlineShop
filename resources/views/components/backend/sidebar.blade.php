@@ -63,7 +63,7 @@
             </div>
         </li>
 
-        <hr class="sidebar-divider">
+        {{-- <hr class="sidebar-divider"> --}}
 
 
         <li

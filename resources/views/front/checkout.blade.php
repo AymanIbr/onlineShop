@@ -146,13 +146,39 @@
                                         <div class="h6" id="shipping-amount">
                                             ${{ number_format($totalShippingCharge) }}</div>
                                     </div>
+                                    <div class="d-flex justify-content-between mt-2">
+                                        <div class="h6"><strong>Discount</strong></div>
+                                        <div class="h6 text-danger" id="discount-display">$0</div>
+                                    </div>
+
                                     <div class="d-flex justify-content-between mt-2 summery-end">
                                         <div class="h5"><strong>Total</strong></div>
                                         <div class="h5" id="total-amount">
                                             ${{ number_format($cart->total() + $totalShippingCharge) }}</div>
                                     </div>
+
                                     <input type="hidden" id="subtotal-amount" data-value="{{ $cart->total() }}">
                                     <input type="hidden" id="discount-amount" data-value="0">
+                                </div>
+                            </div>
+
+
+                            <div class="input-group apply-coupan mt-4">
+                                <input type="text" placeholder="Coupon Code" class="form-control"
+                                    id="discount_code" name="discount_code">
+                                <div id="discount_code_error" class="invalid-feedback"></div>
+
+                                <button class="btn btn-dark" type="button" id="apply-discount">Apply Coupon</button>
+                            </div>
+                            <div id="applied-coupon" class="mt-3" style="display: none;">
+                                <div
+                                    class="d-flex justify-content-between align-items-center border rounded px-3 py-2 bg-light shadow-sm">
+                                    <span id="applied-coupon-text" class="text-dark fw-semibold"></span>
+                                    <button type="button" id="remove-coupon"
+                                        class="btn p-0 border-0 bg-transparent text-danger" style="font-size: 2.5rem;"
+                                        title="Remove coupon">
+                                        &times;
+                                    </button>
                                 </div>
                             </div>
 
@@ -301,8 +327,91 @@
                 let subtotal = parseFloat($('#subtotal-amount').data('value')) || 0;
                 let discount = parseFloat($('#discount-amount').data('value')) || 0;
                 let total = subtotal + shippingAmount - discount;
-                $('#total-amount').text(`$${total.toFixed(0)}`);
+                $('#total-amount').text(`$${total.toFixed(2)}`);
             }
+
+            // Apply
+
+            $("#apply-discount").click(function(e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '{{ route('apply.discount') }}',
+                    type: "POST",
+                    data: {
+                        code: $("#discount_code").val(),
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            toastr.success(response.message || 'Coupon applied successfully!');
+
+                            let code = $("#discount_code").val();
+                            $("#applied-coupon-text").text(`${code}`);
+                            $("#applied-coupon").show();
+                            $("#discount_code").val('');
+
+                            let amount = parseFloat(response.amount);
+                            let type = response.type;
+                            let subtotal = parseFloat($('#subtotal-amount').data('value'));
+                            let discount = type === 'percent' ? (amount / 100) * subtotal : amount;
+
+                            $('#discount-amount').data('value', discount);
+                            $('#discount-display').text(`-$${discount.toFixed(0)}`);
+
+                            let shippingAmountText = $('#shipping-amount').text().replace('$', '') || '0';
+                            let shippingAmount = parseFloat(shippingAmountText);
+                            updateTotal(shippingAmount);
+                        } else {
+                            toastr.error(response.message || 'Failed to apply coupon.');
+                        }
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 422) {
+                            let errors = xhr.responseJSON.errors;
+                            for (let field in errors) {
+                                toastr.error(errors[field][0]);
+                            }
+                        } else if (xhr.status === 404 || xhr.status === 400) {
+                            let message = xhr.responseJSON.message ||
+                                'Invalid or inactive discount coupon.';
+                            toastr.error(message);
+                        } else {
+                            toastr.error('Something went wrong. Please try again.');
+                            console.log(xhr.responseText);
+                        }
+                    }
+                });
+            });
+
+            // remove coupon
+            $("#remove-coupon").click(function() {
+                $.ajax({
+                    url: '{{ route('remove.discount') }}',
+                    type: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            toastr.success(response.message || 'Coupon removed');
+                            $("#applied-coupon").hide();
+                            $("#discount_code").val('');
+                            $('#discount-amount').data('value', 0);
+                            $('#discount-display').text('$0');
+
+                            let shippingAmountText = $('#shipping-amount').text().replace('$', '') || '0';
+                            let shippingAmount = parseFloat(shippingAmountText);
+                            updateTotal(shippingAmount);
+                        } else {
+                            toastr.error('Failed to remove coupon.');
+                        }
+                    },
+                    error: function() {
+                        toastr.error('Something went wrong while removing coupon.');
+                    }
+                });
+            });
         </script>
     @endpush
 

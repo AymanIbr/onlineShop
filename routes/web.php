@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FrontController;
@@ -21,10 +22,15 @@ Route::name('site.')->controller(FrontController::class)->group(function () {
 
 
 Route::middleware('auth:web')->group(function () {
-    Route::view('profile', 'front.profile');
+    Route::get('profile', [AuthUserController::class, 'profile'])->name('profile');
+    Route::get('my-order', [AuthUserController::class, 'myOrder'])->name('my.order');
+    Route::get('/my-orders/{order}', [AuthUserController::class, 'show'])->name('order.details');
+
     Route::get('thanks/{order}', [CheckoutController::class, 'thanks'])->name('thanks');
 
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('checkout', [CheckoutController::class, 'store']);
 });
 Route::post('/shipping-charge', [CheckoutController::class, 'getCharge'])->name('shipping.charge');
+Route::post('/apply-discount', [CheckoutController::class, 'applyDiscount'])->name('apply.discount');
+Route::post('/remove-discount', [CheckoutController::class, 'removeDiscount'])->name('remove.discount');

@@ -86,22 +86,33 @@
                         @endif
                     @endguest
 
-                    {{-- @auth('web')
+                    @auth('web')
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle text-dark" href="#" role="button" id="userMenu"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                                 {{ Auth::guard('web')->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i
+                                            class="fas fa-user"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('my.order') }}"><i
+                                            class="fas fa-shopping-bag"></i> My Orders</a></li>
+                                <li><a class="dropdown-item" href="er.wishlist') }}"><i
+                                            class="fas fa-heart"></i> Wishlist</a></li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout').submit();">
-                                        <i class="fa fa-lock me-2"></i>Sign Out
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
                                     </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        style="display: none;">
+                                        @csrf
+                                    </form>
                                 </li>
                             </ul>
                         </div>
-                    @endauth --}}
+                    @endauth
+
 
                     <!-- Search Form -->
                     <form action="" class="d-flex ms-3">
@@ -115,9 +126,9 @@
                     </form>
 
                     <!-- Hidden Logout Form -->
-                    <form action="{{ route('logout') }}" method="POST" id="logout" style="display: none;">
+                    {{-- <form action="{{ route('logout') }}" method="POST" id="logout" style="display: none;">
                         @csrf
-                    </form>
+                    </form> --}}
 
                 </div>
 

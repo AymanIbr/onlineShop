@@ -59,9 +59,9 @@
                                 <th>#</th>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Type</th>
+                                {{-- <th>Type</th> --}}
                                 <th>Discount Amount</th>
-                                <th>Min. Order</th>
+                                {{-- <th>Min. Order</th> --}}
                                 <th>Active</th>
                                 <th>Starts At</th>
                                 <th>Expires At</th>
@@ -73,9 +73,9 @@
                                 <th>#</th>
                                 <th>Code</th>
                                 <th>Name</th>
-                                <th>Type</th>
+                                {{-- <th>Type</th> --}}
                                 <th>Discount Amount</th>
-                                <th>Min. Order</th>
+                                {{-- <th>Min. Order</th> --}}
                                 <th>Active</th>
                                 <th>Starts At</th>
                                 <th>Expires At</th>
@@ -88,7 +88,7 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $coupon->code }}</td>
                                     <td>{{ $coupon->name ?? '-' }}</td>
-                                    <td>{{ ucfirst($coupon->type) }}</td>
+                                    {{-- <td>{{ ucfirst($coupon->type) }}</td> --}}
                                     <td>
                                         @if ($coupon->type == 'percent')
                                             {{ $coupon->discount_amount }} %
@@ -96,18 +96,29 @@
                                             ${{ number_format($coupon->discount_amount, 2) }}
                                         @endif
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($coupon->min_amount)
                                             ${{ number_format($coupon->min_amount, 2) }}
                                         @else
                                             -
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td>
+
                                         @if ($coupon->active)
-                                            <span class="badge bg-success">Active</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;"
+                                                class="me-1 text-success" fill="none" viewBox="0 0 24 24"
+                                                stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M5 13l4 4L19 7" />
+                                            </svg>
                                         @else
-                                            <span class="badge bg-danger">Inactive</span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" style="width: 40px; height: 40px;"
+                                                class="me-1 text-center align-items-center text-danger" fill="none"
+                                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M6 18L18 6M6 6l12 12" />
+                                            </svg>
                                         @endif
                                     </td>
                                     <td>{{ $coupon->starts_at->format('Y-m-d') }}</td>
@@ -125,7 +136,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center text-danger">No Coupons Found</td>
+                                    <td colspan="8" class="text-center text-danger">No Coupons Found</td>
                                 </tr>
                             @endforelse
                         </tbody>

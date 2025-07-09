@@ -35,7 +35,7 @@
                 <div class="mb-3">
                     <label for="type" class="form-label">Discount Type</label>
                     <select name="type" id="type" class="form-control @error('type') is-invalid @enderror">
-                        <option value="">-- Select Discount Type --</option>
+                        <option value=""> Select Discount Type </option>
                         <option value="percent" {{ old('type', $coupon->type ?? '') == 'percent' ? 'selected' : '' }}>
                             Percentage
                         </option>
