@@ -22,7 +22,11 @@ Route::name('site.')->controller(FrontController::class)->group(function () {
 
 
 Route::middleware('auth:web')->group(function () {
+
     Route::get('profile', [AuthUserController::class, 'profile'])->name('profile');
+    Route::post('/profile', [AuthUserController::class, 'updateProfile'])->name('profile.update');
+
+
     Route::get('my-order', [AuthUserController::class, 'myOrder'])->name('my.order');
     Route::get('/my-orders/{order}', [AuthUserController::class, 'show'])->name('order.details');
 
