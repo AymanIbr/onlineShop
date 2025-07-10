@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderEmail;
 use App\Models\DiscountCoupon;
 use App\Models\Order;
 use App\Models\OrderItem;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\Intl\Countries;
 use Throwable;
@@ -131,13 +133,14 @@ class CheckoutController extends Controller
                 'order_notes' => $request->order_notes,
             ]);
 
+            Mail::to($order->user->email)->queue(new OrderEmail($order));
+
             foreach ($cart->get() as $item) {
                 Product::where('id', $item->product_id)
                     ->update([
                         'quantity' => DB::raw("quantity - {$item->quantity}")
                     ]);
             }
-
 
             $cart->empty();
             DB::commit();
@@ -149,9 +152,10 @@ class CheckoutController extends Controller
             ]);
         } catch (Throwable $e) {
             DB::rollBack();
+
             return response()->json([
                 'status' => false,
-                'message' => 'Something went wrong. Please try again later.'
+                'message' => 'Something went wrong. Please try again later.',
             ], 500);
         }
     }
