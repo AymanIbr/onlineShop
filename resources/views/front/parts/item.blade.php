@@ -2,7 +2,13 @@
      <div class="product-image position-relative">
          <img src="{{ $product->image_path }}" alt="" class="card-img-top"
              style="width: 100%; height: 250px; object-fit: cover;">
-         <a class="whishlist" href="222"><i class="far fa-heart"></i></a>
+
+
+         <a class="whishlist add-to-wishlist {{ in_array($product->id, $wishlistItems ?? []) ? 'active' : '' }}"
+             data-id="{{ $product->id }}" href="javascript:void(0)" title="Add to Wishlist">
+             <i class="{{ in_array($product->id, $wishlistItems ?? []) ? 'fas' : 'far' }} fa-heart"></i>
+         </a>
+
 
          <div class="product-action">
              <button type="button" class="btn btn-dark add-to-cart" data-id="{{ $product->id }}">

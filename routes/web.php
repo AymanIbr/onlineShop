@@ -4,11 +4,12 @@ use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\WishlistController;
 use Illuminate\Support\Facades\Route;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/test', function () {
+    return view('front.wishlist');
+});
 
 
 
@@ -34,6 +35,8 @@ Route::middleware('auth:web')->group(function () {
 
     Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
     Route::post('checkout', [CheckoutController::class, 'store']);
+
+    Route::resource('/wishlist', WishlistController::class)->names('site.wishlist');
 });
 Route::post('/shipping-charge', [CheckoutController::class, 'getCharge'])->name('shipping.charge');
 Route::post('/apply-discount', [CheckoutController::class, 'applyDiscount'])->name('apply.discount');

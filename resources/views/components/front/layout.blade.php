@@ -56,6 +56,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
 
     @stack('css')
+
+    {{-- <style>
+        .wishlist,
+        .wishlist i {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #aaa;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .wishlist.active i {
+            color: red;
+        }
+    </style> --}}
+
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -93,12 +110,13 @@
                                 {{ Auth::guard('web')->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
-                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i
-                                            class="fas fa-user"></i> My Profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile') }}"><i class="fas fa-user"></i>
+                                        My Profile</a></li>
                                 <li><a class="dropdown-item" href="{{ route('my.order') }}"><i
                                             class="fas fa-shopping-bag"></i> My Orders</a></li>
-                                <li><a class="dropdown-item" href="er.wishlist') }}"><i
-                                            class="fas fa-heart"></i> Wishlist</a></li>
+                                <li><a class="dropdown-item" href="{{ route('site.wishlist.index') }}"><i
+                                            class="fas fa-heart"></i>
+                                        Wishlist</a></li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -294,7 +312,53 @@
                 }
             })
 
-        })
+        });
+
+
+        // wishlist
+        $('.add-to-wishlist').click(function() {
+            let button = $(this);
+            let id = button.data('id');
+
+            if (button.hasClass('active')) {
+                Swal.fire({
+                    title: "Already in Wishlist!",
+                    text: "This product is already in your wishlist.",
+                    icon: "info",
+                    draggable: true
+                });
+                return;
+            }
+
+            $.ajax({
+                url: '/wishlist',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    product_id: id,
+                },
+                success: (response) => {
+
+                    button.addClass('active');
+                    button.find('i').removeClass('far').addClass('fas');
+
+                    Swal.fire({
+                        title: "Added to Wishlist!",
+                        text: response.message,
+                        icon: "success",
+                        draggable: true
+                    });
+                },
+                error: (xhr) => {
+                    Swal.fire({
+                        title: "Oops!",
+                        text: xhr.responseJSON?.message || "Failed to add to wishlist.",
+                        icon: "error",
+                        draggable: true
+                    });
+                }
+            });
+        });
     </script>
 
     <script type="text/javascript">

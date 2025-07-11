@@ -7,11 +7,12 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\SubCategory;
+use App\Repositories\Wishlist\WishlistRepository;
 use Illuminate\Http\Request;
 
 class FrontController extends Controller
 {
-    public function index()
+    public function index(WishlistRepository $wishlistRepo)
     {
         $products = Product::where('is_featured', true)
             ->where('active', true)
@@ -22,10 +23,13 @@ class FrontController extends Controller
             ->take(8)
             ->get();
 
-        return view('front.index', compact('products', 'latestProduct'));
+        $wishlistItems = $wishlistRepo->get()->pluck('product_id')->toArray();
+
+
+        return view('front.index', compact('products', 'latestProduct','wishlistItems'));
     }
 
-    public function shop(Request $request, $categorySlug = null, $subCategorySlug = null)
+    public function shop(Request $request, WishlistRepository $wishlistRepo, $categorySlug = null, $subCategorySlug = null)
     {
         $categories = Category::select('id', 'name', 'slug')
             ->with(['sub_categories' => function ($query) {
@@ -89,11 +93,14 @@ class FrontController extends Controller
             }
         }
 
+        $wishlistItems = $wishlistRepo->get()->pluck('product_id')->toArray();
+
+
         $priceMax = intval($request->get('price_max') == 0) ? 1000 : $request->get('price_max');
         $priceMin = intval($request->get('price_min'));
         $products = $query->paginate(3);
 
-        return view('front.shop', compact('categories', 'brands', 'products', 'categorySlug', 'subCategorySlug', 'priceMax', 'priceMin'));
+        return view('front.shop', compact('categories', 'brands', 'products', 'categorySlug', 'subCategorySlug', 'priceMax', 'priceMin', 'wishlistItems'));
     }
 
 
