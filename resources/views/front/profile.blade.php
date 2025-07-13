@@ -87,7 +87,7 @@
                 $('#update-profile-form').on('submit', function(e) {
                     e.preventDefault();
 
-                    let form = $(this); 
+                    let form = $(this);
                     let formData = new FormData(this);
 
                     $.ajax({

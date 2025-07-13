@@ -61,9 +61,24 @@
 
                             {{-- {{ Str::words($product->description, 2, '...') }} --}}
                             <p>{!! \Illuminate\Support\Str::words(strip_tags($product->description), 10, '...') !!}</p>
-                            <button type="button" class="btn btn-dark add-to-cart" data-id="{{ $product->id }}">
-                                <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
-                            </button>
+
+
+                            @if ($product->track_qty == 1)
+                                @if ($product->quantity > 0)
+                                    <button type="button" class="btn btn-dark add-to-cart"
+                                        data-id="{{ $product->id }}">
+                                        <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                    </button>
+                                @else
+                                    <button type="button" class="btn btn-dark">
+                                        Out Of Stock
+                                    </button>
+                                @endif
+                            @else
+                                <button type="button" class="btn btn-dark add-to-cart" data-id="{{ $product->id }}">
+                                    <i class="fas fa-shopping-cart"></i> &nbsp;ADD TO CART
+                                </button>
+                            @endif
                         </div>
                     </div>
 
@@ -97,7 +112,8 @@
                                     aria-labelledby="shipping-tab">
                                     <p>{!! $product->shipping_returns !!}</p>
                                 </div>
-                                <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                                <div class="tab-pane fade" id="reviews" role="tabpanel"
+                                    aria-labelledby="reviews-tab">
 
                                 </div>
                             </div>

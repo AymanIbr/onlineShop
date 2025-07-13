@@ -14,6 +14,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\LoginResponse;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -67,6 +70,38 @@ class FortifyServiceProvider extends ServiceProvider
             Fortify::viewPrefix('auth.');
         } else {
             Fortify::viewPrefix('front.auth.');
+        }
+
+        // user not active
+        Fortify::authenticateUsing(function (Request $request) {
+
+            if (Config::get('fortify.guard') !== 'web') {
+                return null;
+            }
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                if (!$user->active) {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => ['Your account is not active. Please contact support.'],
+                    ]);
+                }
+                return $user;
+            }
+
+            return null;
+        });
+
+        // check admin
+
+        if (Config::get('fortify.guard') === 'admin') {
+            Fortify::authenticateUsing(function (Request $request) {
+                $admin = \App\Models\Admin::where('email', $request->email)->first();
+                if ($admin && Hash::check($request->password, $admin->password)) {
+                    return $admin;
+                }
+                return null;
+            });
         }
     }
 }

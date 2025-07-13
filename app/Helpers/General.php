@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Category;
+use App\Models\Page;
 
 function getCategories()
 {
@@ -14,4 +15,10 @@ function getCategories()
             'active' => true,
         ])
         ->get();
+}
+
+function staticPages()
+{
+    $pages = Page::orderBy('name','ASC')->get();
+    return $pages;
 }

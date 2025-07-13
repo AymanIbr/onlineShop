@@ -37,6 +37,8 @@ Route::middleware('auth:web')->group(function () {
     Route::post('checkout', [CheckoutController::class, 'store']);
 
     Route::resource('/wishlist', WishlistController::class)->names('site.wishlist');
+
+    Route::get('/page/{page:slug}',[FrontController::class, 'page'])->name('page');
 });
 Route::post('/shipping-charge', [CheckoutController::class, 'getCharge'])->name('shipping.charge');
 Route::post('/apply-discount', [CheckoutController::class, 'applyDiscount'])->name('apply.discount');

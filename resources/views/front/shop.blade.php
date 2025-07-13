@@ -195,6 +195,13 @@
                     params.push("brands=" + selectedBrands.join(","));
                 }
 
+                // Search
+                const searchValue = '{{ request()->get('search') }}';
+                if (searchValue) {
+                    params.push("search=" + encodeURIComponent(searchValue));
+                }
+
+
                 // Sorting filter
                 const sortValue = $("#sort").val();
                 if (sortValue) {

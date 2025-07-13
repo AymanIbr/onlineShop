@@ -133,15 +133,17 @@
 
 
                     <!-- Search Form -->
-                    <form action="" class="d-flex ms-3">
+                    <form action="{{ route('site.shop') }}" method="get" class="d-flex ms-3">
+                        {{-- @csrf --}}
                         <div class="input-group">
-                            <input type="text" placeholder="Search For Products" class="form-control"
-                                aria-label="Search">
+                            <input type="text" name="search" value="{{ Request::get('search') }}"
+                                placeholder="Search For Products" class="form-control" aria-label="Search">
                             <button class="btn btn-outline-secondary" type="submit">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                     </form>
+
 
                     <!-- Hidden Logout Form -->
                     {{-- <form action="{{ route('logout') }}" method="POST" id="logout" style="display: none;">
@@ -227,11 +229,13 @@
                     <div class="footer-card">
                         <h3>Important Links</h3>
                         <ul>
-                            <li><a href="about-us.php" title="About">About</a></li>
-                            <li><a href="contact-us.php" title="Contact Us">Contact Us</a></li>
-                            <li><a href="#" title="Privacy">Privacy</a></li>
-                            <li><a href="#" title="Privacy">Terms & Conditions</a></li>
-                            <li><a href="#" title="Privacy">Refund Policy</a></li>
+
+                            @if (staticPages()->isNotEmpty())
+                                @foreach (staticPages() as $page)
+                                    <li><a href="{{ route('page',$page->slug) }}" title="{{ $page->name }}">{{ $page->name }}</a></li>
+                                @endforeach
+
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -240,9 +244,9 @@
                     <div class="footer-card">
                         <h3>My Account</h3>
                         <ul>
-                            <li><a href="#" title="Sell">Login</a></li>
-                            <li><a href="#" title="Advertise">Register</a></li>
-                            <li><a href="#" title="Contact Us">My Orders</a></li>
+                            <li><a href="{{ route('login') }}" title="Sell">Login</a></li>
+                            <li><a href="{{ route('register') }}" title="Advertise">Register</a></li>
+                            <li><a href="{{ route('my.order') }}" title="Contact Us">My Orders</a></li>
                         </ul>
                     </div>
                 </div>

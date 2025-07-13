@@ -81,26 +81,27 @@
 
                             });
                         },
-                        error: function(xhr) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessage = '';
+                       error: function(xhr) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = '';
 
-                            if (errors) {
-                                for (let field in errors) {
-                                    errorMessage += errors[field][0] + '<br>';
-                                }
-                            } else if (xhr.responseJSON.message) {
-                                errorMessage = xhr.responseJSON.message;
-                            } else {
-                                errorMessage = 'An unexpected error occurred.';
+                        if (errors) {
+                            for (let field in errors) {
+                                errorMessage += errors[field][0] + '<br>';
                             }
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Login Failed',
-                                html: errorMessage
-                            });
+                        } else if (xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        } else {
+                            errorMessage = 'An unexpected error occurred.';
                         }
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Failed',
+                            html: errorMessage
+                        });
+                    }
+
                     });
                 });
             });

@@ -123,7 +123,7 @@
             </div>
         </li>
 
-          <li
+        <li
             class="nav-item {{ request()->routeIs('admin.coupons.index') || request()->routeIs('admin.coupons.create') ? 'active' : '' }} ">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoCoupons"
                 aria-expanded="true" aria-controls="collapseTwoCoupons">
@@ -144,11 +144,25 @@
 
 
         <li class="nav-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-    <a class="nav-link collapsed" href="{{ route('admin.orders.index') }}">
-        <i class="fas fa-file-invoice"></i>
-        <span>Orders</span>
-    </a>
-</li>
+            <a class="nav-link collapsed" href="{{ route('admin.orders.index') }}">
+                <i class="fas fa-file-invoice"></i>
+                <span>Orders</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="{{ route('admin.users.index') }}">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+        </li>
+
+        <li class="nav-item {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="{{ route('admin.pages.index') }}">
+                <i class="far fa-file-alt"></i> <span>Pages</span>
+            </a>
+        </li>
+
 
 
 

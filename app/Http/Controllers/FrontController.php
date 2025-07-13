@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Page;
 use App\Models\Product;
 use App\Models\SubCategory;
 use App\Repositories\Wishlist\WishlistRepository;
@@ -26,7 +27,7 @@ class FrontController extends Controller
         $wishlistItems = $wishlistRepo->get()->pluck('product_id')->toArray();
 
 
-        return view('front.index', compact('products', 'latestProduct','wishlistItems'));
+        return view('front.index', compact('products', 'latestProduct', 'wishlistItems'));
     }
 
     public function shop(Request $request, WishlistRepository $wishlistRepo, $categorySlug = null, $subCategorySlug = null)
@@ -93,6 +94,12 @@ class FrontController extends Controller
             }
         }
 
+        // search
+
+        if (!empty($request->search)) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+
         $wishlistItems = $wishlistRepo->get()->pluck('product_id')->toArray();
 
 
@@ -123,5 +130,10 @@ class FrontController extends Controller
             ->get();
 
         return view('front.product', compact('product', 'relatedProducts'));
+    }
+
+    public function page(Page $page)
+    {
+        return view('front.page',compact('page'));
     }
 }
