@@ -7,9 +7,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\SubCategory;
 use App\Repositories\Wishlist\WishlistRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class FrontController extends Controller
 {
@@ -115,7 +117,17 @@ class FrontController extends Controller
     public function product(Product $product)
     {
 
-        $product->load(['image', 'gallery']);
+        $product->loadCount('ratings')
+            ->loadSum('ratings', 'rating')
+            ->load(['image', 'gallery', 'ratings']);
+
+
+        // Rating Calculation
+        $avgRating = $product->ratings_count > 0
+            ? number_format(($product->ratings_sum_rating  / $product->ratings_count), 2)
+            : 0;
+
+        $avgRatingPer = ($avgRating * 100) / 5;
 
         $relatedProducts = Product::where('id', '!=', $product->id)
             ->where('active', true)
@@ -129,11 +141,57 @@ class FrontController extends Controller
             ->take(9)
             ->get();
 
-        return view('front.product', compact('product', 'relatedProducts'));
+        return view('front.product', compact('product', 'relatedProducts', 'avgRating', 'avgRatingPer'));
     }
 
     public function page(Page $page)
     {
-        return view('front.page',compact('page'));
+        return view('front.page', compact('page'));
+    }
+
+
+    public function saveRating(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|max:255',
+            'email' => 'required|email',
+            'rating' => 'required|in:1,2,3,4,5',
+            'comment' => 'required|string',
+            'product_id' => 'required|exists:products,id',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->messages()], 422);
+        }
+
+        $count = Rating::where('email', $request->email)
+            ->where('product_id', $request->product_id)
+            ->count();
+
+        if ($count > 0) {
+            return response()->json(['message' => 'You have already rated this product'], 422);
+        }
+
+        $rating = Rating::create([
+            'product_id' => $request->product_id,
+            'username' => $request->username,
+            'email' => $request->email,
+            'rating' => $request->rating,
+            'comment' => $request->comment,
+            'status' => 0,
+        ]);
+        $product = Product::with('ratings')->withCount('ratings')->withSum('ratings', 'rating')->find($request->product_id);
+
+        $averageRating = 0;
+        if ($product->ratings_count > 0) {
+            $averageRating = round($product->ratings_sum_rating / $product->ratings_count, 1);
+        }
+
+        return response()->json([
+            'message' => 'Your review has been submitted successfully. Thank you for your feedback!',
+            'rating' => $rating,
+            'ratings_count' => $product->ratings_count,
+            'ratings_rating' => $averageRating,
+        ], 200);
     }
 }

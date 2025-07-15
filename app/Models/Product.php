@@ -45,6 +45,11 @@ class Product extends Model
         return $this->belongsTo(Brand::class, 'brand_id');
     }
 
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class, 'product_id')->where('status',1);
+    }
+
 
     public function getImagePathAttribute()
     {

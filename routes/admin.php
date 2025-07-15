@@ -31,6 +31,9 @@ Route::prefix('admin/dashboard')->middleware('auth:admin')->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::resource('pages', PagesController::class);
 
+    Route::get('/ratings',[ProductController::class, 'productRatings'])->name('product.rating');
+    Route::get('/change-rating-status',[ProductController::class, 'changeRatingStatus'])->name('change.rating');
+    
     Route::get('/change-password', [AuthAdminController::class, 'showPassword'])->name('change-password');
     Route::post('/change-password', [AuthAdminController::class, 'changePassword']);
 });

@@ -105,6 +105,14 @@
         </li>
 
 
+          <li class="nav-item {{ request()->routeIs('admin.product.rating') ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="{{ route('admin.product.rating') }}">
+                <i class="fas fa-star"></i>
+                <span>Ratings</span>
+            </a>
+        </li>
+
+
         <li
             class="nav-item {{ request()->routeIs('admin.shipping.index') || request()->routeIs('admin.shipping.create') ? 'active' : '' }} ">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwoShipping"

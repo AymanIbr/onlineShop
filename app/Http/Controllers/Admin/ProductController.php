@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Product;
+use App\Models\Rating;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -265,5 +266,28 @@ class ProductController extends Controller
             ->select('id', 'name')
             ->get();
         return response()->json($subCategories);
+    }
+
+    public function productRatings()
+    {
+        $ratings = Rating::with('product')->latest()->paginate(10);
+        return view('dashboard.products.ratings', compact('ratings'));
+    }
+
+    public function changeRatingStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:ratings,id',
+            'status' => 'required|in:0,1',
+        ]);
+
+        $rating = Rating::findOrFail($request->id);
+        $rating->status = $request->status;
+        $rating->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Rating status updated successfully!',
+        ]);
     }
 }
