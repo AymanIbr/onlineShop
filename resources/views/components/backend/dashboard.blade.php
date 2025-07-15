@@ -206,9 +206,9 @@
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                <a class="dropdown-item" href="{{ route('admin.change-password') }}">
+                                    <i class="fas fa-unlock-alt"></i>
+                                    Change Password
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a onclick="event.preventDefault();document.querySelector('#logout-form').submit()"

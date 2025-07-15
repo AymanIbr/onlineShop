@@ -27,6 +27,8 @@ Route::middleware('auth:web')->group(function () {
     Route::get('profile', [AuthUserController::class, 'profile'])->name('profile');
     Route::post('/profile', [AuthUserController::class, 'updateProfile'])->name('profile.update');
 
+    Route::get('/change-password', [AuthUserController::class, 'showPassword'])->name('change-password');
+    Route::post('/change-password', [AuthUserController::class, 'changePassword']);
 
     Route::get('my-order', [AuthUserController::class, 'myOrder'])->name('my.order');
     Route::get('/my-orders/{order}', [AuthUserController::class, 'show'])->name('order.details');
@@ -38,8 +40,11 @@ Route::middleware('auth:web')->group(function () {
 
     Route::resource('/wishlist', WishlistController::class)->names('site.wishlist');
 
-    Route::get('/page/{page:slug}',[FrontController::class, 'page'])->name('page');
+    Route::get('/page/{page:slug}', [FrontController::class, 'page'])->name('page');
 });
 Route::post('/shipping-charge', [CheckoutController::class, 'getCharge'])->name('shipping.charge');
 Route::post('/apply-discount', [CheckoutController::class, 'applyDiscount'])->name('apply.discount');
 Route::post('/remove-discount', [CheckoutController::class, 'removeDiscount'])->name('remove.discount');
+
+
+Route::post('/forgot-password', [AuthUserController::class, 'sendResetLinkEmail'])->name('password.email');

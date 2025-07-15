@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthAdminController;
 use App\Http\Controllers\Admin\BrandControllers;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -29,6 +30,9 @@ Route::prefix('admin/dashboard')->middleware('auth:admin')->name('admin.')->grou
     Route::resource('orders', OrderController::class);
     Route::resource('users', UserController::class);
     Route::resource('pages', PagesController::class);
+
+    Route::get('/change-password', [AuthAdminController::class, 'showPassword'])->name('change-password');
+    Route::post('/change-password', [AuthAdminController::class, 'changePassword']);
 });
 Route::get('/delete-image/{id?}', [ProductController::class, 'delete_img'])->name('delete_img');
 Route::get('/get-subcategories/{category_id}', [ProductController::class, 'getSubCategories'])->name('get.subcategories');
